@@ -1,0 +1,16 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      {{title}}
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list inset>
+    <button ion-item *ngFor="let game of games" (click)="selectGame(game)">
+    {{ game.name }}
+  </button>
+  </ion-list>
+
+</ion-content>
