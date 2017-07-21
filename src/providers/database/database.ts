@@ -218,7 +218,7 @@ export class DatabaseProvider {
               })
             } else {
               return this.database.executeSql(`INSERT INTO actual(idgame, idstep) VALUES (${idgame}, 1);`, {}).then((result) => {
-                if (result.insertId) {
+                if (result.rowsAffected) {
                   return this.getStep(1, idgame).then((step) => {
                     return step;
                   })
@@ -244,6 +244,20 @@ export class DatabaseProvider {
   }
 
   dropTables() {
+    return this.isReady()
+      .then(() => {
+        let commands = this.scripts.dropScripts();
+        let funcs = commands.map(cmd => () => this.database.executeSql(cmd));
+
+        promiseSerial(funcs)
+          .then((data) => {
+            console.log(data);
+            this.newSubject();
+          }).catch(console.error);
+      })
+  }
+
+  deleteGames() {
     return this.isReady()
       .then(() => {
         let commands = this.scripts.deleteScripts();

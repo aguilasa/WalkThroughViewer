@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, LoadingController } from 'ionic-angular';
 
 import { DatabaseProvider } from '../../providers/database/database';
 import { HomePage } from '../home/home';
@@ -10,11 +10,10 @@ import { HomePage } from '../home/home';
 })
 export class InitDataPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private database: DatabaseProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private database: DatabaseProvider, public loadingCtrl: LoadingController) {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad InitDataPage');
   }
 
   add() {
@@ -22,18 +21,42 @@ export class InitDataPage {
   }
 
   drop() {
-    this.database.dropTables();
+    let loading = this.loadingCtrl.create({
+      content: 'Excluindo tabelas...'
+    });
+    loading.present().then(() => {
+      this.database.dropTables().then(() => {
+        loading.dismiss();
+      }).catch((err) => {
+        loading.dismiss();
+      });
+    })
   }
 
   ins() {
-    console.log('inserindo');
-    this.database.insertGames().then(() => {
-      console.log('fim');
-    }).catch((err) => console.log("error detected creating tables", err));
+    let loading = this.loadingCtrl.create({
+      content: 'Inserindo...'
+    });
+    loading.present().then(() => {
+      this.database.insertGames().then(() => {
+        loading.dismiss();
+      }).catch((err) => {
+        loading.dismiss();
+      });
+    })
   }
 
   del() {
-
+    let loading = this.loadingCtrl.create({
+      content: 'Excluindo...'
+    });
+    loading.present().then(() => {
+      this.database.deleteGames().then(() => {
+        loading.dismiss();
+      }).catch((err) => {
+        loading.dismiss();
+      });
+    })
   }
 
   home() {

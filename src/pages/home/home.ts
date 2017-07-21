@@ -15,6 +15,10 @@ export class HomePage {
   public games: Array<any> = [];
 
   constructor(public navCtrl: NavController, private database: DatabaseProvider) {
+    
+  }
+
+  ionViewDidEnter() {
     this.getGames();
   }
 
@@ -22,10 +26,16 @@ export class HomePage {
     this.database.getGames().then((data) => {
       this.games = data;
     }).then(() => {
-      if (this.games.length == 0) {
+      this.redirect();
+    }).catch(() => {
+      this.redirect();
+    })
+  }
+
+  private redirect() {
+    if (this.games.length === 0) {
         this.navCtrl.push(InitDataPage, {});
       }
-    })
   }
 
   selectGame(game) {

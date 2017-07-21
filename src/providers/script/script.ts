@@ -18,9 +18,17 @@ export class ScriptProvider {
 
   deleteScripts() {
     return [
+      'DELETE FROM actual',
+      'DELETE FROM gamestep',
+      'DELETE FROM gamelevel',
+      'DELETE FROM game'];
+  }
+
+  dropScripts() {
+    return [
       'DROP TABLE IF EXISTS actual',
       'DROP TABLE IF EXISTS gamestep',
-      'DROP TABLE IF EXISTS gamestep',
+      'DROP TABLE IF EXISTS gamelevel',
       'DROP TABLE IF EXISTS game'];
   }
 

@@ -11,17 +11,16 @@ import { StepModel } from '../../models/step/step';
 export class GamePage {
 
   public game: any;
-  public step: StepModel = null;
+  public step: StepModel; // = new StepModel(0, 0, 0, "", "");
   public total: number;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private database: DatabaseProvider) {
     this.game = this.navParams.get('game');
   }
 
-  ionViewDidLoad() {
-    this.database.getActualStep(this.game.id).then((data) => {
-      this.step = data;
-      console.log(this.step.levelTitle);
+  ionViewDidEnter() {
+    this.database.getActualStep(this.game.id).then((step) => {
+      this.step = step;
     }).then(() => {
       this.database.getTotalSteps(this.game.id).then((data) => {
         this.total = data;
@@ -31,22 +30,30 @@ export class GamePage {
 
   nextStep() {
     if (this.step.id < this.total) {
-      this.database.getStep(this.step.id + 1, this.game.id).then((data) => {
-        this.step = data;
-      }).then(() => {
-        this.database.setActualStep(this.step.id, this.game.id);
-      })
+      this.setStep(this.step.id + 1);
     }
   }
 
   prevStep() {
     if (this.step.id > 1) {
-      this.database.getStep(this.step.id - 1, this.game.id).then((data) => {
-        this.step = data;
-      }).then(() => {
-        this.database.setActualStep(this.step.id, this.game.id);
-      })
+      this.setStep(this.step.id - 1);
     }
+  }
+
+  firstStep() {
+    this.setStep(1);
+  }
+
+  lastStep() {
+    this.setStep(this.total);
+  }
+
+  setStep(idstep: number) {
+    this.database.getStep(idstep, this.game.id).then((data) => {
+      this.step = data;
+    }).then(() => {
+      this.database.setActualStep(this.step.id, this.game.id);
+    })
   }
 
 }

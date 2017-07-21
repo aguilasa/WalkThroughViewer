@@ -7,10 +7,12 @@
 </ion-header>
 
 <ion-content padding>
-  <ion-list inset>
+  <ion-list inset *ngIf="games.length > 0">
     <button ion-item *ngFor="let game of games" (click)="selectGame(game)">
     {{ game.name }}
   </button>
   </ion-list>
+
+  <button ion-button block large (click)="redirect()" *ngIf="games.length === 0">Dados</button>
 
 </ion-content>
