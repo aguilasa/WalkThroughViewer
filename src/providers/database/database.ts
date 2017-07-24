@@ -101,7 +101,7 @@ export class DatabaseProvider {
     let funcs: Array<any> = [];
 
     for (let cmd of scripts) {
-      funcs.push(this.database.executeSql(cmd));
+      funcs.push(this.database.executeSql(cmd, {}));
     }
 
     return Promise.all(funcs);
