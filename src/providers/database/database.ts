@@ -75,11 +75,6 @@ export class SQLiteMock {
   }
 }
 
-const promiseSerial = funcs =>
-  funcs.reduce((promise, func) =>
-    promise.then(result => func().then(Array.prototype.concat.bind(result))),
-    Promise.resolve([]));
-
 @Injectable()
 export class DatabaseProvider {
 
@@ -102,14 +97,18 @@ export class DatabaseProvider {
     });
   }
 
-  private createTables() {
-    let commands = this.scripts.createScripts();
-    let funcs = commands.map(cmd => () => this.database.executeSql(cmd));
+  private promiseSerial(scripts: Array<any>) {
+    let funcs: Array<any> = [];
 
-    return promiseSerial(funcs)
-      .then(() => {
-        this.dbReady.next(true);
-      }).catch((err) => console.log("error detected creating tables", err));
+    for (let cmd of scripts) {
+      funcs.push(this.database.executeSql(cmd));
+    }
+
+    return Promise.all(funcs);
+  }
+
+  private createTables() {
+    return this.promiseSerial(this.scripts.createScripts());
   }
 
   private isReady() {
@@ -127,10 +126,6 @@ export class DatabaseProvider {
         });
       }
     })
-  }
-
-  private newSubject() {
-    this.dbReady = new BehaviorSubject<boolean>(false);
   }
 
   isFirstTime() {
@@ -246,40 +241,21 @@ export class DatabaseProvider {
   dropTables() {
     return this.isReady()
       .then(() => {
-        let commands = this.scripts.dropScripts();
-        let funcs = commands.map(cmd => () => this.database.executeSql(cmd));
-
-        promiseSerial(funcs)
-          .then((data) => {
-            console.log(data);
-            this.newSubject();
-          }).catch(console.error);
+        return this.promiseSerial(this.scripts.dropScripts());
       })
   }
 
   deleteGames() {
     return this.isReady()
       .then(() => {
-        let commands = this.scripts.deleteScripts();
-        let funcs = commands.map(cmd => () => this.database.executeSql(cmd));
-
-        promiseSerial(funcs)
-          .then((data) => {
-            console.log(data);
-            this.newSubject();
-          }).catch(console.error);
+        return this.promiseSerial(this.scripts.deleteScripts());
       })
   }
 
   insertGames() {
     return this.isReady()
       .then(() => {
-        let commands = this.scripts.insertScripts();
-        let funcs = commands.map(cmd => () => this.database.executeSql(cmd));
-
-        promiseSerial(funcs)
-          .then(console.log)
-          .catch(console.error);
+        return this.promiseSerial(this.scripts.insertScripts());
       })
   }
 
