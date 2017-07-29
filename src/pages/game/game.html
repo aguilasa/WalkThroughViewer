@@ -9,24 +9,16 @@
 
 <ion-content padding>
   <ion-card *ngIf="step">
-    <ion-buttons end>
-      <button ion-button icon-only [disabled]="step.id == 1" (click)="firstStep()"><ion-icon name="arrow-dropleft"></ion-icon></button>
-      <button ion-button icon-only [disabled]="step.id == 1" (click)="prevStep()"><ion-icon name="arrow-back"></ion-icon></button>
-      <button ion-button icon-only [disabled]="step.id == total" (click)="nextStep()"><ion-icon name="arrow-forward"></ion-icon></button>
-      <button ion-button icon-only [disabled]="step.id == total" (click)="lastStep()"><ion-icon name="arrow-dropright"></ion-icon></button>
-    </ion-buttons>
+    <nav-buttons [firstBtnEnabled]="step.id != 1" [prevBtnEnabled]="step.id != 1" [nextBtnEnabled]="step.id != total" [lastBtnEnabled]="step.id != total"
+      (firstBtnClick)="firstStep()" (prevBtnClick)="prevStep()" (nextBtnClick)="nextStep()" (lastBtnClick)="lastStep()"></nav-buttons>
     <ion-card-header>
       {{step.levelTitle}}
     </ion-card-header>
     <ion-card-content>
       {{step.textStep}}
     </ion-card-content>
-    <ion-buttons end>
-      <button ion-button icon-only [disabled]="step.id == 1" (click)="firstStep()"><ion-icon name="arrow-dropleft"></ion-icon></button>
-      <button ion-button icon-only [disabled]="step.id == 1" (click)="prevStep()"><ion-icon name="arrow-back"></ion-icon></button>
-      <button ion-button icon-only [disabled]="step.id == total" (click)="nextStep()"><ion-icon name="arrow-forward"></ion-icon></button>
-      <button ion-button icon-only [disabled]="step.id == total" (click)="lastStep()"><ion-icon name="arrow-dropright"></ion-icon></button>
-    </ion-buttons>
+     <nav-buttons [firstBtnEnabled]="step.id != 1" [prevBtnEnabled]="step.id != 1" [nextBtnEnabled]="step.id != total" [lastBtnEnabled]="step.id != total"
+      (firstBtnClick)="firstStep()" (prevBtnClick)="prevStep()" (nextBtnClick)="nextStep()" (lastBtnClick)="lastStep()"></nav-buttons>
   </ion-card>
 
 </ion-content>

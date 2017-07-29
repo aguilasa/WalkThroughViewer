@@ -13,6 +13,7 @@ import { ViewPage } from '../pages/view/view';
 import { GamePage } from '../pages/game/game';
 import { InitDataPage } from '../pages/init-data/init-data';
 import { ScriptProvider } from '../providers/script/script';
+import { NavButtonsComponent } from '../components/nav-buttons/nav-buttons';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { ScriptProvider } from '../providers/script/script';
     HomePage,
     ViewPage,
     InitDataPage,
-    GamePage
+    GamePage,
+    NavButtonsComponent
   ],
   imports: [
     BrowserModule,

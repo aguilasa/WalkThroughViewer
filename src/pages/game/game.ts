@@ -11,8 +11,12 @@ import { StepModel } from '../../models/step/step';
 export class GamePage {
 
   public game: any;
-  public step: StepModel; // = new StepModel(0, 0, 0, "", "");
+  public step: StepModel;
   public total: number;
+  public fbEnabled: boolean = true;
+  public pbEnabled: boolean = true;
+  public nbEnabled: boolean = true;
+  public lbEnabled: boolean = true;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private database: DatabaseProvider) {
     this.game = this.navParams.get('game');
