@@ -189,6 +189,32 @@ export class DatabaseProvider {
       })
   }
 
+  getNextStep(id: number, idgame: number) {
+    return this.isReady()
+      .then(() => {
+        return this.database.executeSql(`SELECT gamestep.id, gamestep.idgame game, gamelevel.id idLevel, gamelevel.title levelTitle, gamestep.textstep textStep FROM gamestep, gamelevel WHERE gamelevel.id = gamestep.idlevel AND gamelevel.idgame = gamestep.idgame AND gamestep.id = (select min(g.id) from gamestep g where g.id > ${id} and g.idgame = ${idgame}) AND gamestep.idgame = ${idgame}`, [])
+          .then((data) => {
+            if (data.rows.length) {
+              return StepModel.fromJson(data.rows.item(0));
+            }
+            return null;
+          })
+      })
+  }
+
+  getPrevStep(id: number, idgame: number) {
+    return this.isReady()
+      .then(() => {
+        return this.database.executeSql(`SELECT gamestep.id, gamestep.idgame game, gamelevel.id idLevel, gamelevel.title levelTitle, gamestep.textstep textStep FROM gamestep, gamelevel WHERE gamelevel.id = gamestep.idlevel AND gamelevel.idgame = gamestep.idgame AND gamestep.id = (select max(g.id) from gamestep g where g.id < ${id} and g.idgame = ${idgame}) AND gamestep.idgame = ${idgame}`, [])
+          .then((data) => {
+            if (data.rows.length) {
+              return StepModel.fromJson(data.rows.item(0));
+            }
+            return null;
+          })
+      })
+  }
+
   getTotalSteps(idgame: number) {
     return this.isReady()
       .then(() => {

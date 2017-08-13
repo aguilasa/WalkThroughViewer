@@ -34,13 +34,21 @@ export class GamePage {
 
   nextStep() {
     if (this.step.id < this.total) {
-      this.setStep(this.step.id + 1);
+      this.database.getNextStep(this.step.id, this.game.id).then((data) => {
+        this.step = data;
+      }).then(() => {
+        this.database.setActualStep(this.step.id, this.game.id);
+      })
     }
   }
 
   prevStep() {
     if (this.step.id > 1) {
-      this.setStep(this.step.id - 1);
+      this.database.getPrevStep(this.step.id, this.game.id).then((data) => {
+        this.step = data;
+      }).then(() => {
+        this.database.setActualStep(this.step.id, this.game.id);
+      })
     }
   }
 
