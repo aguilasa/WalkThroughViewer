@@ -14,8 +14,7 @@
     <ion-card-header>
       {{step.levelTitle}}
     </ion-card-header>
-    <ion-card-content>
-      {{step.textStep}}
+    <ion-card-content [innerHTML]="step.textStep">
     </ion-card-content>
      <nav-buttons [firstBtnEnabled]="step.id != 1" [prevBtnEnabled]="step.id != 1" [nextBtnEnabled]="step.id != total" [lastBtnEnabled]="step.id != total"
       (firstBtnClick)="firstStep()" (prevBtnClick)="prevStep()" (nextBtnClick)="nextStep()" (lastBtnClick)="lastStep()"></nav-buttons>
